@@ -35,14 +35,12 @@ if __name__ == '__main__':
     
     #df_wide.to_csv(dir+'Merge_Result.csv',encoding ='GB2312')
     ###客户经理开发的客户，剔除经纪人开发的客户并进行求和
-    df_invest_cs_tmp = df_wide[[u'融资余额',u'\t服务人员',u'\t开发人员']]   
-    str2float = lambda s:float(s.replace(',','')) 
-    df_invest_cs_tmp[u'融资余额new'] = df_invest_cs_tmp[u'融资余额'].map(str2float) #将String转换成float
-
+    df_invest_cs_tmp = df_wide[[u'融资余额',u'\t服务人员',u'\t开发人员']]      
+    str2float = lambda s:float(str(s).replace(',','')) 
+    df_invest_cs_tmp.loc[:,u'融资余额new'] = df_invest_cs_tmp[u'融资余额'].map(str2float) #将String转换成float
     #df_invest_cs_tmp.to_csv(dir+'df_invest_cs_tmp.csv',encoding ='GB2312')
     df_invest_cs = df_invest_cs_tmp[df_invest_cs_tmp[u'\t开发人员'].isnull()]
     #df_invest_cs.to_csv(dir+'df_invest_cs.csv',encoding ='GB2312')
-    #print(df_invest_cs)
     df_result = df_invest_cs[[u'融资余额new',u'\t服务人员']].groupby([u'\t服务人员']).sum()
     print(df_result)
 
@@ -51,7 +49,7 @@ if __name__ == '__main__':
     df_broker_cs = df_invest_cs_tmp[df_invest_cs_tmp[u'\t开发人员'].notnull()]
     df_broker_result = df_broker_cs[[u'融资余额new',u'\t开发人员']].groupby([u'\t开发人员']).sum()
     df_broker_result.to_csv(dir+'broker_result.csv',encoding ='GB2312')
-	#print("Broker Sum is")
+    ###print result
     print("Consult Sum = "+str(df_invest_cs[u'融资余额new'].sum()))
     print("Broker Sum  = "+str(df_broker_cs[u'融资余额new'].sum()))
     print("Calculate Successful !!!!!")
